@@ -13,7 +13,17 @@
   <!-- Top Header / App Branding -->
   <header class="header">
     <div class="logo-container">
-      <div class="logo-icon"></div>
+      <div class="logo-icon-wrapper">
+        <svg class="logo-svg" viewBox="0 0 24 24">
+          <defs>
+            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#a855f7" />
+              <stop offset="100%" stop-color="#3b82f6" />
+            </linearGradient>
+          </defs>
+          <path d="M12 2 C12 8, 16 12, 22 12 C16 12, 12 16, 12 22 C12 16, 8 12, 2 12 C8 12, 12 8, 12 2 Z" fill="url(#logoGrad)" />
+        </svg>
+      </div>
       <span class="logo-text">Velox AI</span>
     </div>
     <button id="googleLoginBtn" class="login-btn">
