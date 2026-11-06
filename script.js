@@ -8,7 +8,12 @@ textarea.addEventListener('input', () => {
   textarea.style.height = textarea.scrollHeight + 'px';
 });
 
-// Send Message Functionality
+// Helper to prevent HTML injection
+function escapeHtml(text) {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+// Send Message Functionality with Thinking Animation
 function handleSendMessage() {
   const messageText = textarea.value.trim();
   if (messageText === "") return;
@@ -34,24 +39,28 @@ function handleSendMessage() {
   textarea.style.height = 'auto';
   chatContainer.scrollTop = chatContainer.scrollHeight;
 
-  // Simulate AI response (Aap yahan apni Gemini API laga sakte hain)
+  // AI Thinking State (Rotating Icon + "Velox is thinking...")
+  const aiBubble = document.createElement('div');
+  aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: center; gap: 10px;";
+  aiBubble.innerHTML = `
+    <div class="logo-icon rotating-icon" style="width: 20px; height: 20px; display: inline-block;"></div>
+    <span style="color: #8e918f; font-size: 14px; font-weight: 500;">Velox is thinking...</span>
+  `;
+  chatContainer.appendChild(aiBubble);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+
+  // Simulate AI response after delay (Yahan baad mein Gemini API hook hogi)
   setTimeout(() => {
-    const aiBubble = document.createElement('div');
-    aiBubble.style.cssText = "margin: 16px 0; display: flex; justify-content: flex-start;";
+    // Thinking state ko response se update karo (Header text bina)
+    aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: flex-start; gap: 12px;";
     aiBubble.innerHTML = `
-      <div style="background: transparent; color: #e3e3e3; padding: 12px 0; max-width: 80%; word-break: break-word; font-size: 15px; line-height: 1.5;">
-        <b style="color: #a855f7; display: block; margin-bottom: 4px;">Velox AI</b>
+      <div class="logo-icon" style="width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px;"></div>
+      <div style="background: transparent; color: #e3e3e3; max-width: 80%; word-break: break-word; font-size: 15px; line-height: 1.5;">
         Aapne kaha: "${escapeHtml(messageText)}" — Yeh ek testing response hai. Abhi yahan hum Gemini API connect karenge!
       </div>
     `;
-    chatContainer.appendChild(aiBubble);
     chatContainer.scrollTop = chatContainer.scrollHeight;
-  }, 1000);
-}
-
-// Helper to prevent HTML injection
-function escapeHtml(text) {
-  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }, 1500);
 }
 
 // Event listeners for send button and Enter key
@@ -112,3 +121,4 @@ document.getElementById('cameraBtn').addEventListener('click', async () => {
     alert("Camera access denied or not supported.");
   }
 });
+  
