@@ -39,30 +39,22 @@ function handleSendMessage() {
   textarea.style.height = 'auto';
   chatContainer.scrollTop = chatContainer.scrollHeight;
 
-  // AI Thinking State (Exact Rotating SVG Logo + "Velox is thinking...")
+  // AI Thinking State (logo.png rotating + smaller text)
   const aiBubble = document.createElement('div');
-  aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: center; gap: 10px;";
+  aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: center; gap: 8px;";
   aiBubble.innerHTML = `
-    <div class="logo-icon-wrapper rotating-icon" style="width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center;">
-      <svg class="logo-svg" viewBox="0 0 24 24" style="width: 100%; height: 100%;">
-        <path d="M12 2 C12 8, 16 12, 22 12 C16 12, 12 16, 12 22 C12 16, 8 12, 2 12 C8 12, 12 8, 12 2 Z" fill="url(#logoGrad)" />
-      </svg>
-    </div>
-    <span style="color: #8e918f; font-size: 14px; font-weight: 500;">Velox is thinking...</span>
+    <img src="logo.png" class="rotating-icon" style="width: 18px; height: 18px; object-fit: contain;" />
+    <span style="color: #8e918f; font-size: 13px; font-weight: 400;">Velox is thinking...</span>
   `;
   chatContainer.appendChild(aiBubble);
   chatContainer.scrollTop = chatContainer.scrollHeight;
 
   // Simulate AI response after delay
   setTimeout(() => {
-    // Thinking state ko response se update karo
-    aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: flex-start; gap: 12px;";
+    // Thinking state ko final response se replace karo
+    aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: flex-start; gap: 10px;";
     aiBubble.innerHTML = `
-      <div class="logo-icon-wrapper" style="width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; display: inline-flex; align-items: center; justify-content: center;">
-        <svg class="logo-svg" viewBox="0 0 24 24" style="width: 100%; height: 100%;">
-          <path d="M12 2 C12 8, 16 12, 22 12 C16 12, 12 16, 12 22 C12 16, 8 12, 2 12 C8 12, 12 8, 12 2 Z" fill="url(#logoGrad)" />
-        </svg>
-      </div>
+      <img src="logo.png" style="width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px; object-fit: contain;" />
       <div style="background: transparent; color: #e3e3e3; max-width: 80%; word-break: break-word; font-size: 15px; line-height: 1.5;">
         Aapne kaha: "${escapeHtml(messageText)}" — Yeh ek testing response hai. Abhi yahan hum Gemini API connect karenge!
       </div>
