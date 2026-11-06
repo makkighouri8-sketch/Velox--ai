@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Velox AI</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- FontAwesome Icons for Mic, Plus, Send -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Top Header / App Branding -->
+  <header class="header">
+    <div class="logo-container">
+      <div class="logo-icon"></div>
+      <span class="logo-text">Velox AI</span>
+    </div>
+    <button id="googleLoginBtn" class="login-btn">
+      <i class="fa-brands fa-google"></i> Sign in
+    </button>
+  </header>
+
+  <!-- Main Chat Area -->
+  <main class="chat-container" id="chatContainer">
+    <div class="welcome-screen">
+      <h1>Hello, Jamshed</h1>
+      <p>How can Velox help you today?</p>
+    </div>
+  </main>
+
+  <!-- Input Area (Gemini Style) -->
+  <div class="input-container">
+    <div class="input-box">
+      
+      <!-- Plus Menu Button & Popover -->
+      <div class="plus-menu-wrapper">
+        <button class="icon-btn" id="plusBtn" title="Add Attachment">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+        <div class="plus-dropdown" id="plusDropdown">
+          <label class="menu-item">
+            <i class="fa-solid fa-file-arrow-up"></i> Add File
+            <input type="file" id="fileInput" hidden />
+          </label>
+          <label class="menu-item">
+            <i class="fa-solid fa-image"></i> Add Photo
+            <input type="file" id="photoInput" accept="image/*" hidden />
+          </label>
+          <button class="menu-item" id="cameraBtn">
+            <i class="fa-solid fa-camera"></i> Camera
+          </button>
+        </div>
+      </div>
+
+      <!-- Text Input Field -->
+      <textarea id="userInput" placeholder="Ask Velox..." rows="1"></textarea>
+
+      <!-- Mic & Send Buttons -->
+      <div class="right-actions">
+        <button class="icon-btn" id="micBtn" title="Voice Search">
+          <i class="fa-solid fa-microphone"></i>
+        </button>
+        <button class="icon-btn send-btn" id="sendBtn" title="Send Message">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
