@@ -39,12 +39,12 @@ function handleSendMessage() {
   textarea.style.height = 'auto';
   chatContainer.scrollTop = chatContainer.scrollHeight;
 
-  // AI Thinking State (logo.png rotating + smaller text)
+  // AI Thinking State (Bada logo.png rotating + "Velox is thinking...")
   const aiBubble = document.createElement('div');
-  aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: center; gap: 8px;";
+  aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: center; gap: 10px;";
   aiBubble.innerHTML = `
-    <img src="logo.png" class="rotating-icon" style="width: 18px; height: 18px; object-fit: contain;" />
-    <span style="color: #8e918f; font-size: 13px; font-weight: 400;">Velox is thinking...</span>
+    <img src="logo.png" class="rotating-icon" style="width: 26px; height: 26px; object-fit: contain;" />
+    <span style="color: #8e918f; font-size: 15px; font-weight: 500;">Velox is thinking...</span>
   `;
   chatContainer.appendChild(aiBubble);
   chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -52,9 +52,9 @@ function handleSendMessage() {
   // Simulate AI response after delay
   setTimeout(() => {
     // Thinking state ko final response se replace karo
-    aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: flex-start; gap: 10px;";
+    aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: flex-start; gap: 12px;";
     aiBubble.innerHTML = `
-      <img src="logo.png" style="width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px; object-fit: contain;" />
+      <img src="logo.png" style="width: 26px; height: 26px; flex-shrink: 0; margin-top: 2px; object-fit: contain;" />
       <div style="background: transparent; color: #e3e3e3; max-width: 80%; word-break: break-word; font-size: 15px; line-height: 1.5;">
         Aapne kaha: "${escapeHtml(messageText)}" — Yeh ek testing response hai. Abhi yahan hum Gemini API connect karenge!
       </div>
@@ -121,3 +121,4 @@ document.getElementById('cameraBtn').addEventListener('click', async () => {
     alert("Camera access denied or not supported.");
   }
 });
+
