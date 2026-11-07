@@ -219,7 +219,7 @@ textarea {
 .thinking-container {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 8px; /* Yahan gap 14px se kam karke 8px kar diya hai taake kareeb ho jaye */
   margin: 16px 0;
 }
 
@@ -237,5 +237,4 @@ textarea {
   color: #8e918f;
   letter-spacing: 0.2px;
   line-height: 1;
-  }
-  
+}
