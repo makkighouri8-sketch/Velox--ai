@@ -13,26 +13,6 @@ function escapeHtml(text) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-// Typewriter / Word-by-Word Animation Function
-async function typeWriterEffect(element, text, speed = 15) {
-  let i = 0;
-  element.innerHTML = ""; // Pehle empty karo
-  
-  return new Promise((resolve) => {
-    function typing() {
-      if (i < text.length) {
-        element.innerHTML += escapeHtml(text.charAt(i));
-        i++;
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-        setTimeout(typing, speed);
-      } else {
-        resolve();
-      }
-    }
-    typing();
-  });
-}
-
 // Send Message Functionality via Secure Vercel Backend Proxy
 async function handleSendMessage() {
   const messageText = textarea.value.trim();
@@ -59,12 +39,12 @@ async function handleSendMessage() {
   textarea.style.height = 'auto';
   chatContainer.scrollTop = chatContainer.scrollHeight;
 
-  // AI Thinking State (Using CSS class for perfect size and alignment)
+  // AI Invisible Pulsing / Thinking Animation State
   const aiBubble = document.createElement('div');
   aiBubble.className = 'thinking-container';
   aiBubble.innerHTML = `
     <img src="logo.png" class="rotating-icon" />
-    <span>Velox is thinking...</span>
+    <span style="opacity: 0.6; animation: pulse 1.5s infinite;">Velox is thinking...</span>
   `;
   chatContainer.appendChild(aiBubble);
   chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -82,19 +62,21 @@ async function handleSendMessage() {
     const data = await response.json();
     let aiReply = data.reply || data.error || "Maaf kijiyega, response hasil karne mein masla hua.";
 
-    // Thinking state ko real AI response container se replace karo
+    // Thinking state ko real AI response se aik sath (smoothly) replace karo
     aiBubble.className = '';
-    aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: flex-start; gap: 12px;";
+    aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: flex-start; gap: 12px; opacity: 0; transition: opacity 0.4s ease-in;";
     aiBubble.innerHTML = `
       <img src="logo.png" style="width: 24px; height: 24px; flex-shrink: 0; margin-top: 2px; object-fit: contain;" />
-      <div class="ai-text-response" style="background: transparent; color: #e3e3e3; max-width: 80%; word-break: break-word; font-size: 15px; line-height: 1.5; white-space: pre-wrap;"></div>
+      <div style="background: transparent; color: #e3e3e3; max-width: 80%; word-break: break-word; font-size: 15px; line-height: 1.6; white-space: pre-wrap;">
+        ${escapeHtml(aiReply)}
+      </div>
     `;
     
-    const textTarget = aiBubble.querySelector('.ai-text-response');
-    
-    // Typewriter effect ko call karo (speed adjust kar sakte ho, 15ms is fast & smooth)
-    await typeWriterEffect(textTarget, aiReply, 12);
-    
+    // Fade-in smooth transition trigger karo
+    setTimeout(() => {
+      aiBubble.style.opacity = '1';
+    }, 50);
+
     chatContainer.scrollTop = chatContainer.scrollHeight;
 
   } catch (error) {
