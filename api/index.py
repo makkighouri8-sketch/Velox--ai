@@ -20,10 +20,30 @@ class handler(BaseHTTPRequestHandler):
                 self.wfile.write(b'{"error": "API key missing"}')
                 return
 
-            # Gemini API Request (gemini-2.5-flash)
+            # Gemini API Request with Advanced System Instructions & Professional Formatting Toolkit
             url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
+            
             payload = json.dumps({
-                "contents": [{"parts": [{"text": user_message}]}]
+                "system_instruction": {
+                    "parts": [{
+                        "text": (
+                            "You are Velox AI, a high-performance, intelligent AI assistant created and developed by Gulfaam Ghouri. "
+                            "Whenever a user asks about your identity, name, or creator, proudly state that you are Velox AI built by Gulfaam Ghouri. "
+                            "STRICT FORMATTING & LAYOUT RULES: "
+                            "1. Always organize and format your responses for maximum readability and scannability. Avoid dense walls of text. "
+                            "2. Use headings (such as ## or ###) to create clear hierarchy when explaining multi-part guides or concepts. "
+                            "3. Use bolding (**...**) judiciously to emphasize key phrases and guide the user's eye. "
+                            "4. For bullet points and lists (*), every single item or step MUST start on a completely new line with proper spacing. Never combine steps or list items into a single continuous paragraph. "
+                            "5. Use tables when organizing or comparing data for quick reference. "
+                            "6. Keep your layout clean, structured, and easy to digest at a glance."
+                        )
+                    }]
+                },
+                "contents": [
+                    {
+                        "parts": [{"text": user_message}]
+                    }
+                ]
             }).encode('utf-8')
 
             req = urllib.request.Request(url, data=payload, headers={'Content-Type': 'application/json'})
