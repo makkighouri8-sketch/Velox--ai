@@ -13,6 +13,26 @@ function escapeHtml(text) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+// Typewriter / Word-by-Word Animation Function
+async function typeWriterEffect(element, text, speed = 15) {
+  let i = 0;
+  element.innerHTML = ""; // Pehle empty karo
+  
+  return new Promise((resolve) => {
+    function typing() {
+      if (i < text.length) {
+        element.innerHTML += escapeHtml(text.charAt(i));
+        i++;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        setTimeout(typing, speed);
+      } else {
+        resolve();
+      }
+    }
+    typing();
+  });
+}
+
 // Send Message Functionality via Secure Vercel Backend Proxy
 async function handleSendMessage() {
   const messageText = textarea.value.trim();
@@ -62,15 +82,19 @@ async function handleSendMessage() {
     const data = await response.json();
     let aiReply = data.reply || data.error || "Maaf kijiyega, response hasil karne mein masla hua.";
 
-    // Thinking state ko real AI response se replace karo
+    // Thinking state ko real AI response container se replace karo
     aiBubble.className = '';
     aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: flex-start; gap: 12px;";
     aiBubble.innerHTML = `
       <img src="logo.png" style="width: 24px; height: 24px; flex-shrink: 0; margin-top: 2px; object-fit: contain;" />
-      <div style="background: transparent; color: #e3e3e3; max-width: 80%; word-break: break-word; font-size: 15px; line-height: 1.5;">
-        ${escapeHtml(aiReply)}
-      </div>
+      <div class="ai-text-response" style="background: transparent; color: #e3e3e3; max-width: 80%; word-break: break-word; font-size: 15px; line-height: 1.5; white-space: pre-wrap;"></div>
     `;
+    
+    const textTarget = aiBubble.querySelector('.ai-text-response');
+    
+    // Typewriter effect ko call karo (speed adjust kar sakte ho, 15ms is fast & smooth)
+    await typeWriterEffect(textTarget, aiReply, 12);
+    
     chatContainer.scrollTop = chatContainer.scrollHeight;
 
   } catch (error) {
@@ -145,4 +169,4 @@ document.getElementById('cameraBtn').addEventListener('click', async () => {
     alert("Camera access denied or not supported.");
   }
 });
-    
+      
