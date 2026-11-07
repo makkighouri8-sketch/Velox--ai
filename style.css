@@ -213,5 +213,27 @@ textarea {
 
 .rotating-icon {
   animation: spin-rotate 1.2s linear infinite;
+  /* Perfect alignment for thinking state */
+.thinking-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.thinking-container img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  display: block;
+}
+
+.thinking-container span {
+  font-size: 15px;
+  font-weight: 500;
+  color: #8e918f;
+  line-height: 1;
+}
+  
   }
   
