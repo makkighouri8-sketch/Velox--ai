@@ -17,10 +17,10 @@ class handler(BaseHTTPRequestHandler):
                 self.send_response(500)
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
-                self.wfile.write(b'{"error": "API key missing in Vercel env"}')
+                self.wfile.write(b'{"error": "API key missing"}')
                 return
 
-            # Gemini API Request
+            # Gemini API Request (gemini-2.5-flash)
             url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
             payload = json.dumps({
                 "contents": [{"parts": [{"text": user_message}]}]
@@ -28,17 +28,24 @@ class handler(BaseHTTPRequestHandler):
 
             req = urllib.request.Request(url, data=payload, headers={'Content-Type': 'application/json'})
             
+            ai_reply = "No response"
             try:
                 with urllib.request.urlopen(req) as response:
-                    res_data = json.loads(response.read().decode('utf-8'))
-                    ai_reply = res_data.get('candidates', [{}])[0].get('content', {}).get('parts', [{}])[0].get('text', 'Empty response')
+                    res_raw = response.read().decode('utf-8', errors='ignore')
+                    res_data = json.loads(res_raw)
+                    if 'candidates' in res_data and len(res_data['candidates']) > 0:
+                        ai_reply = res_data['candidates'][0]['content']['parts'][0]['text']
             except urllib.error.HTTPError as e:
-                error_detail = e.read().decode('utf-8', errors='ignore')
-                ai_reply = f"API HTTP Error {e.code}: {error_detail[:100]}"
-            except Exception as ex:
-                ai_reply = f"Request Error: {str(ex)}"
+                err_body = e.read().decode('utf-8', errors='ignore')
+                ai_reply = f"API Error HTTP {e.code}"
+            except Exception as inner_ex:
+                ai_reply = "Connection processing error"
 
-            safe_reply = ai_reply.encode('ascii', 'ignore').decode('ascii')
+            # Clean text strictly to ASCII to prevent any encoding crash
+            safe_reply = str(ai_reply).encode('ascii', 'ignore').decode('ascii')
+            if not safe_reply.strip():
+                safe_reply = "Response received."
+
             response_body = json.dumps({"reply": safe_reply}).encode('utf-8')
 
             self.send_response(200)
@@ -48,13 +55,12 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write(response_body)
 
         except Exception as err:
-            err_str = str(err).encode('ascii', 'ignore').decode('ascii')
-            error_body = json.dumps({"error": err_str}).encode('utf-8')
-            self.send_response(500)
+            err_body = json.dumps({"reply": "Server error occurred."}).encode('utf-8')
+            self.send_response(200) # Sending 200 with friendly message to prevent UI crash
             self.send_header('Content-Type', 'application/json')
             self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
-            self.wfile.write(error_body)
+            self.wfile.write(err_body)
 
     def do_OPTIONS(self):
         self.send_response(200)
@@ -62,4 +68,4 @@ class handler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
         self.end_headers()
-        
+    
