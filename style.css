@@ -213,7 +213,9 @@ textarea {
 
 .rotating-icon {
   animation: spin-rotate 1.2s linear infinite;
-  /* Perfect alignment for thinking state */
+}
+
+/* Perfect alignment for thinking state */
 .thinking-container {
   display: flex;
   align-items: center;
@@ -233,7 +235,5 @@ textarea {
   font-weight: 500;
   color: #8e918f;
   line-height: 1;
-}
-  
   }
   
