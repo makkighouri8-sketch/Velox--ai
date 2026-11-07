@@ -215,25 +215,24 @@ textarea {
   animation: spin-rotate 1.2s linear infinite;
 }
 
-/* Perfect alignment for thinking state */
+/* Perfect alignment and big size for thinking state */
 .thinking-container {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   margin: 16px 0;
 }
 
 .thinking-container img {
-  width: 32px;
-  height: 32px;
+  width: 46px;
+  height: 46px;
   object-fit: contain;
   display: block;
 }
 
 .thinking-container span {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   color: #8e918f;
   line-height: 1;
   }
-  
