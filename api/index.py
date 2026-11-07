@@ -17,7 +17,7 @@ class handler(BaseHTTPRequestHandler):
                 self.send_response(500)
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
-                self.wfile.write('{"error": "API key not configured"}'.encode('utf-8'))
+                self.wfile.write(b'{"error": "API key missing in Vercel env"}')
                 return
 
             # Gemini API Request
@@ -31,16 +31,15 @@ class handler(BaseHTTPRequestHandler):
             try:
                 with urllib.request.urlopen(req) as response:
                     res_data = json.loads(response.read().decode('utf-8'))
-                    ai_reply = res_data.get('candidates', [{}])[0].get('content', {}).get('parts', [{}])[0].get('text', 'No response')
+                    ai_reply = res_data.get('candidates', [{}])[0].get('content', {}).get('parts', [{}])[0].get('text', 'Empty response')
             except urllib.error.HTTPError as e:
-                ai_reply = f"API Error code: {e.code}"
-            except Exception:
-                ai_reply = "Failed to fetch response"
+                error_detail = e.read().decode('utf-8', errors='ignore')
+                ai_reply = f"API HTTP Error {e.code}: {error_detail[:100]}"
+            except Exception as ex:
+                ai_reply = f"Request Error: {str(ex)}"
 
-            # Clean response to strictly ASCII/Safe JSON bytes
             safe_reply = ai_reply.encode('ascii', 'ignore').decode('ascii')
-            response_dict = {"reply": safe_reply}
-            response_body = json.dumps(response_dict).encode('utf-8')
+            response_body = json.dumps({"reply": safe_reply}).encode('utf-8')
 
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
