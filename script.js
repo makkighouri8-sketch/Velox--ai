@@ -3,14 +3,6 @@ const textarea = document.getElementById('userInput');
 const chatContainer = document.getElementById('chatContainer');
 const sendBtn = document.getElementById('sendBtn');
 
-// Gemini Model Configuration (Fastest model for chat)
-const GEMINI_MODEL = "gemini-2.5-flash"; 
-
-// NOTE: Agar aapne Vercel environment variable mein GEMINI_API_KEY di hai 
-// aur static frontend build use kar rahe hain, toh yahan apni key string mein daal dein 
-// ya Vercel build injection use karein. (Yahan apni key rakh lein ya test ke liye paste kar dein)
-const GEMINI_API_KEY = "AQ.Ab8RN6LtUUNmjBhn1lBROnzGqnARxJpQfDG-ardekpOUHf6naA"; 
-
 textarea.addEventListener('input', () => {
   textarea.style.height = 'auto';
   textarea.style.height = textarea.scrollHeight + 'px';
@@ -21,7 +13,7 @@ function escapeHtml(text) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-// Send Message Functionality with Real Gemini API Integration
+// Send Message Functionality via Secure Vercel Backend Proxy
 async function handleSendMessage() {
   const messageText = textarea.value.trim();
   if (messageText === "") return;
@@ -58,29 +50,17 @@ async function handleSendMessage() {
   chatContainer.scrollTop = chatContainer.scrollHeight;
 
   try {
-    // Real Gemini API Request with gemini-2.5-flash
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`, {
+    // Requesting secure backend proxy (No API key exposed in frontend)
+    const response = await fetch('/api/', {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [{ text: messageText }]
-          }
-        ]
-      })
+      body: JSON.stringify({ message: messageText })
     });
 
     const data = await response.json();
-    
-    let aiReply = "Maaf kijiyega, response hasil karne mein masla hua.";
-    if (data.candidates && data.candidates[0].content.parts[0].text) {
-      aiReply = data.candidates[0].content.parts[0].text;
-    } else if (data.error) {
-      aiReply = "API Error: " + data.error.message;
-    }
+    let aiReply = data.reply || data.error || "Maaf kijiyega, response hasil karne mein masla hua.";
 
     // Thinking state ko real AI response se replace karo
     aiBubble.className = '';
@@ -100,7 +80,7 @@ async function handleSendMessage() {
     aiBubble.innerHTML = `
       <img src="logo.png" style="width: 24px; height: 24px; flex-shrink: 0; margin-top: 2px; object-fit: contain;" />
       <div style="background: transparent; color: #f87171; max-width: 80%; word-break: break-word; font-size: 15px; line-height: 1.5;">
-        Connection error! Please check your network or API key configuration.
+        Connection error! Please check your network or server configuration.
       </div>
     `;
     chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -108,7 +88,6 @@ async function handleSendMessage() {
 }
 
 // Event listeners for send button and Enter key
-sendBtn.button?.addEventListener?.('click', async () => {});
 sendBtn.addEventListener('click', handleSendMessage);
 
 textarea.addEventListener('keydown', (e) => {
@@ -166,4 +145,4 @@ document.getElementById('cameraBtn').addEventListener('click', async () => {
     alert("Camera access denied or not supported.");
   }
 });
-      
+    
