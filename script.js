@@ -39,12 +39,12 @@ function handleSendMessage() {
   textarea.style.height = 'auto';
   chatContainer.scrollTop = chatContainer.scrollHeight;
 
-  // AI Thinking State (Bada 36px logo.png rotating + "Velox is thinking...")
+  // AI Thinking State (Using CSS class for perfect size and alignment)
   const aiBubble = document.createElement('div');
-  aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: center; gap: 12px;";
+  aiBubble.className = 'thinking-container';
   aiBubble.innerHTML = `
-    <img src="logo.png" class="rotating-icon" style="width: 36px; height: 36px; object-fit: contain;" />
-    <span style="color: #8e918f; font-size: 15px; font-weight: 500;">Velox is thinking...</span>
+    <img src="logo.png" class="rotating-icon" />
+    <span>Velox is thinking...</span>
   `;
   chatContainer.appendChild(aiBubble);
   chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -52,6 +52,7 @@ function handleSendMessage() {
   // Simulate AI response after delay
   setTimeout(() => {
     // Thinking state ko final response se replace karo
+    aiBubble.className = '';
     aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: flex-start; gap: 12px;";
     aiBubble.innerHTML = `
       <img src="logo.png" style="width: 24px; height: 24px; flex-shrink: 0; margin-top: 2px; object-fit: contain;" />
@@ -113,6 +114,7 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 }
 
 // Camera Action Example
+document.getElementById('cameraBtn').button?.addEventListener?.('click', async () => {});
 document.getElementById('cameraBtn').addEventListener('click', async () => {
   try {
     await navigator.mediaDevices.getUserMedia({ video: true });
