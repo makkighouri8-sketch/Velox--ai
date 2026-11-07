@@ -9,7 +9,7 @@ const GEMINI_MODEL = "gemini-2.5-flash";
 // NOTE: Agar aapne Vercel environment variable mein GEMINI_API_KEY di hai 
 // aur static frontend build use kar rahe hain, toh yahan apni key string mein daal dein 
 // ya Vercel build injection use karein. (Yahan apni key rakh lein ya test ke liye paste kar dein)
-const GEMINI_API_KEY = "YAHAN_APNI_API_KEY_PASTE_KARO"; 
+const GEMINI_API_KEY = "AQ.Ab8RN6LtUUNmjBhn1lBROnzGqnARxJpQfDG-ardekpOUHf6naA"; 
 
 textarea.addEventListener('input', () => {
   textarea.style.height = 'auto';
