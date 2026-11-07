@@ -28,7 +28,7 @@ class handler(BaseHTTPRequestHandler):
 
             req = urllib.request.Request(url, data=payload, headers={'Content-Type': 'application/json'})
             
-            ai_reply = "No response"
+            ai_reply = "Velox is getting ready, please try again."
             try:
                 with urllib.request.urlopen(req) as response:
                     res_raw = response.read().decode('utf-8', errors='ignore')
@@ -36,15 +36,16 @@ class handler(BaseHTTPRequestHandler):
                     if 'candidates' in res_data and len(res_data['candidates']) > 0:
                         ai_reply = res_data['candidates'][0]['content']['parts'][0]['text']
             except urllib.error.HTTPError as e:
-                err_body = e.read().decode('utf-8', errors='ignore')
-                ai_reply = f"API Error HTTP {e.code}"
-            except Exception as inner_ex:
-                ai_reply = "Connection processing error"
+                if e.code == 503:
+                    ai_reply = "Google server is busy right now. Please try again in a second!"
+                else:
+                    ai_reply = f"API Server Error ({e.code})"
+            except Exception:
+                ai_reply = "Network connection hiccup. Try again."
 
-            # Clean text strictly to ASCII to prevent any encoding crash
             safe_reply = str(ai_reply).encode('ascii', 'ignore').decode('ascii')
             if not safe_reply.strip():
-                safe_reply = "Response received."
+                safe_reply = "Done."
 
             response_body = json.dumps({"reply": safe_reply}).encode('utf-8')
 
@@ -54,9 +55,9 @@ class handler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(response_body)
 
-        except Exception as err:
-            err_body = json.dumps({"reply": "Server error occurred."}).encode('utf-8')
-            self.send_response(200) # Sending 200 with friendly message to prevent UI crash
+        except Exception:
+            err_body = json.dumps({"reply": "Please send message again."}).encode('utf-8')
+            self.send_response(200)
             self.send_header('Content-Type', 'application/json')
             self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
@@ -68,4 +69,4 @@ class handler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
         self.end_headers()
-    
+        
