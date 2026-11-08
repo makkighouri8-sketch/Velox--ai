@@ -42,9 +42,10 @@ async function handleSendMessage() {
   // AI Thinking State
   const aiBubble = document.createElement('div');
   aiBubble.className = 'thinking-container';
+  aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: flex-start; gap: 12px;";
   aiBubble.innerHTML = `
-    <img src="logo.png" class="rotating-icon" />
-    <span style="opacity: 0.5; animation: pulseGlow 1s infinite alternate;">Velox is thinking...</span>
+    <img src="logo.png" style="width: 24px; height: 24px; flex-shrink: 0; margin-top: 2px; object-fit: contain;" />
+    <span style="opacity: 0.5; animation: pulseGlow 1s infinite alternate; color: #e3e3e3; font-size: 15px;">Velox is thinking...</span>
   `;
   chatContainer.appendChild(aiBubble);
   chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -107,7 +108,6 @@ document.head.appendChild(styleSheet);
 // Event listeners for send button and Enter key
 sendBtn.addEventListener('click', handleSendMessage);
 
-textarea.readEventListener?.('keydown', () => {}); // placeholder if needed
 textarea.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
@@ -121,12 +121,52 @@ const plusDropdown = document.getElementById('plusDropdown');
 
 plusBtn?.addEventListener('click', (e) => {
   e.stopPropagation();
-  plusDropdown.classList.toggle('active');
+  plusDropdown?.classList.toggle('active');
 });
 
 document.addEventListener('click', () => {
-  plusDropdown?.classList.remove('active');
+  if (plusDropdown) plusDropdown.classList.remove('active');
 });
+
+// --- GOOGLE PROFILE DRAWER & ACCOUNT SYSTEM ---
+const profileAvatarBtn = document.getElementById('profileAvatarBtn');
+const profileDropdown = document.getElementById('profileDropdown');
+
+if (profileAvatarBtn && profileDropdown) {
+  profileAvatarBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
+  });
+
+  document.addEventListener('click', () => {
+    profileDropdown.style.display = 'none';
+  });
+
+  profileDropdown.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+
+  // Handle Google Account Actions inside Drawer
+  document.getElementById('manageGoogleAccount')?.addEventListener('click', () => {
+    window.open('https://myaccount.google.com/', '_blank');
+  });
+
+  document.getElementById('upgradePlanBtn')?.addEventListener('click', () => {
+    alert("Velox AI Pro Subscription feature coming soon!");
+  });
+
+  document.getElementById('logoutBtn')?.addEventListener('click', () => {
+    const confirmSignOut = confirm("Do you want to switch or sign in with another Google Account?");
+    if (confirmSignOut) {
+      let newEmail = prompt("Enter your Google Email address:", "jamshedkhan78661@gmail.com");
+      if (newEmail) {
+        const emailDisplay = document.getElementById('userEmailDisplay');
+        if (emailDisplay) emailDisplay.innerText = newEmail;
+        alert("Successfully signed in as " + newEmail);
+      }
+    }
+  });
+}
 
 // Voice-to-Text (Speech Recognition)
 const micBtn = document.getElementById('micBtn');
