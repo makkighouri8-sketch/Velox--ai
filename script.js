@@ -39,7 +39,7 @@ async function handleSendMessage() {
   textarea.style.height = 'auto';
   chatContainer.scrollTop = chatContainer.scrollHeight;
 
-  // AI Thinking State (Pulsing glowing dots / text)
+  // AI Thinking State
   const aiBubble = document.createElement('div');
   aiBubble.className = 'thinking-container';
   aiBubble.innerHTML = `
@@ -62,24 +62,22 @@ async function handleSendMessage() {
     const data = await response.json();
     let aiReply = data.reply || data.error || "Maaf kijiyega, response hasil karne mein masla hua.";
 
-    // Thinking state ko hata kar real message container banao with smooth word reveal animation
+    // Thinking state ko hata kar clean message container banao with smooth fade-in reveal
     aiBubble.className = '';
-    aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: flex-start; gap: 12px;";
+    aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: flex-start; gap: 12px; opacity: 0; transition: opacity 0.4s ease-in;";
+    aiBubble.innerHTML = `
+      <img src="logo.png" style="width: 24px; height: 24px; flex-shrink: 0; margin-top: 2px; object-fit: contain;" />
+      <div style="background: transparent; color: #e3e3e3; max-width: 80%; word-break: break-word; font-size: 15px; line-height: 1.6; white-space: pre-wrap;">
+        ${escapeHtml(aiReply)}
+      </div>
+    `;
     
-    // Words ko split karke individual spans banate hain taakse smooth wave/fade animation mil sake
-    const words = aiReply.split(' ');
-    let formattedHTML = `<img src="logo.png" style="width: 24px; height: 24px; flex-shrink: 0; margin-top: 2px; object-fit: contain;" />
-      <div style="background: transparent; color: #e3e3e3; max-width: 80%; word-break: break-word; font-size: 15px; line-height: 1.6; white-space: pre-wrap;">`;
-
-    words.forEach((word, index) => {
-      // Har word par staggered delay lagate hain taake wave ki tarha smooth reveal ho
-      const delay = index * 0.02; // Super fast and smooth
-      formattedHTML += `<span class="fade-word" style="opacity: 0; display: inline-block; transform: translateY(6px); animation: smoothReveal 0.4s ease forwards ${delay}s;">${escapeHtml(word)} </span>`;
-    });
-
-    formattedHTML += `</div>`;
-    aiBubble.innerHTML = formattedHTML;
     chatContainer.scrollTop = chatContainer.scrollHeight;
+
+    // Smooth fade-in trigger karo
+    setTimeout(() => {
+      aiBubble.style.opacity = '1';
+    }, 50);
 
   } catch (error) {
     console.error("Fetch Error:", error);
@@ -95,16 +93,10 @@ async function handleSendMessage() {
   }
 }
 
-// Dynamic CSS injection for smooth wave reveal and glowing pulse animations
+// Dynamic CSS injection for glowing pulse animation
 const styleSheet = document.createElement("style");
 styleSheet.type = "text/css";
 styleSheet.innerText = `
-  @keyframes smoothReveal {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
   @keyframes pulseGlow {
     0% { opacity: 0.3; }
     100% { opacity: 0.8; }
@@ -115,6 +107,7 @@ document.head.appendChild(styleSheet);
 // Event listeners for send button and Enter key
 sendBtn.addEventListener('click', handleSendMessage);
 
+textarea.readEventListener?.('keydown', () => {}); // placeholder if needed
 textarea.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
@@ -126,19 +119,19 @@ textarea.addEventListener('keydown', (e) => {
 const plusBtn = document.getElementById('plusBtn');
 const plusDropdown = document.getElementById('plusDropdown');
 
-plusBtn.addEventListener('click', (e) => {
+plusBtn?.addEventListener('click', (e) => {
   e.stopPropagation();
   plusDropdown.classList.toggle('active');
 });
 
 document.addEventListener('click', () => {
-  plusDropdown.classList.remove('active');
+  plusDropdown?.classList.remove('active');
 });
 
 // Voice-to-Text (Speech Recognition)
 const micBtn = document.getElementById('micBtn');
 
-if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+if (micBtn && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const recognition = new SpeechRecognition();
   recognition.continuous = false;
@@ -157,12 +150,12 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 
   recognition.onerror = () => { micBtn.style.color = '#c4c7c5'; };
   recognition.onend = () => { micBtn.style.color = '#c4c7c5'; };
-} else {
+} else if (micBtn) {
   micBtn.style.display = 'none';
 }
 
 // Camera Action Example
-document.getElementById('cameraBtn').addEventListener('click', async () => {
+document.getElementById('cameraBtn')?.addEventListener('click', async () => {
   try {
     await navigator.mediaDevices.getUserMedia({ video: true });
     alert("Camera access granted!");
@@ -170,4 +163,3 @@ document.getElementById('cameraBtn').addEventListener('click', async () => {
     alert("Camera access denied or not supported.");
   }
 });
-      
