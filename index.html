@@ -33,9 +33,25 @@
 
   <!-- Main Chat Area -->
   <main class="chat-container" id="chatContainer">
-    <div class="welcome-screen">
+    <div class="welcome-screen" id="welcomeScreen">
       <h1>Hello, Jamshed</h1>
       <p>How can Velox help you today?</p>
+
+      <!-- Quick Action Chips -->
+      <div class="quick-chips">
+        <button class="chip" data-prompt="Write a clean, modern Python Flask API script">
+          <i class="fa-solid fa-code"></i> Write Python Code
+        </button>
+        <button class="chip" data-prompt="Give me 5 futuristic neon logo ideas for my tech brand">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Neon Logo Ideas
+        </button>
+        <button class="chip" data-prompt="Debug this JavaScript code and explain the fix">
+          <i class="fa-solid fa-bug"></i> Fix My Script
+        </button>
+        <button class="chip" data-prompt="Draft a professional freelance proposal for a web app">
+          <i class="fa-solid fa-rocket"></i> Client Proposal
+        </button>
+      </div>
     </div>
   </main>
 
@@ -79,8 +95,8 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
   <!-- Supabase JS Client CDN -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
 </body>
 </html>
