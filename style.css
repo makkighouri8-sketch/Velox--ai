@@ -94,6 +94,52 @@ body {
   font-size: 24px;
 }
 
+/* Quick Action Chips */
+.quick-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.chip {
+  background: #111111;
+  color: #e3e3e3;
+  border: 1px solid #262626;
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+}
+
+.chip i {
+  color: #a855f7;
+  font-size: 13px;
+  transition: transform 0.25s ease;
+}
+
+.chip:hover {
+  background: #181818;
+  border-color: #a855f7;
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.25);
+  transform: translateY(-2px);
+  color: #ffffff;
+}
+
+.chip:hover i {
+  transform: scale(1.15);
+  color: #3b82f6;
+}
+
+.chip:active {
+  transform: translateY(0);
+}
+
 /* Input Area (Gemini Style) */
 .input-container {
   padding: 16px 24px 24px;
@@ -219,7 +265,7 @@ textarea {
 .thinking-container {
   display: flex;
   align-items: center;
-  gap: 8px; /* Yahan gap 14px se kam karke 8px kar diya hai taake kareeb ho jaye */
+  gap: 8px;
   margin: 16px 0;
 }
 
