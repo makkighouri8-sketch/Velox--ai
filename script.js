@@ -94,6 +94,18 @@ async function handleSendMessage() {
   }
 }
 
+// Quick Action Chips Logic (Auto-Send Enabled)
+document.addEventListener('click', (e) => {
+  const chip = e.target.closest('.chip');
+  if (chip) {
+    const promptText = chip.getAttribute('data-prompt');
+    if (userInput && sendBtn && promptText) {
+      userInput.value = promptText;
+      sendBtn.click(); // Direct message send kar dega
+    }
+  }
+});
+
 // Dynamic CSS injection for glowing pulse animation
 const styleSheet = document.createElement("style");
 styleSheet.type = "text/css";
