@@ -127,6 +127,53 @@ textarea.addEventListener('keydown', (e) => {
   }
 });
 
+// --- MODERN SIDEBAR & HISTORY MANAGEMENT ---
+const sidebar = document.getElementById('sidebar');
+const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+const newChatBtn = document.getElementById('newChatBtn');
+
+sidebarToggleBtn?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  sidebar?.classList.toggle('open');
+});
+
+sidebarCloseBtn?.addEventListener('click', () => {
+  sidebar?.classList.remove('open');
+});
+
+// Close sidebar when clicking outside on mobile/desktop
+document.addEventListener('click', (e) => {
+  if (sidebar && sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== sidebarToggleBtn) {
+    sidebar.classList.remove('open');
+  }
+});
+
+// New Chat Reset Logic
+newChatBtn?.addEventListener('click', () => {
+  chatContainer.innerHTML = `
+    <div class="welcome-screen" id="welcomeScreen">
+      <h1>Hello, Jamshed</h1>
+      <p>How can Velox help you today?</p>
+      <div class="quick-chips">
+        <button class="chip" data-prompt="Write a clean, modern Python Flask API script">
+          <i class="fa-solid fa-code"></i> Write Python Code
+        </button>
+        <button class="chip" data-prompt="Give me 5 futuristic neon logo ideas for my tech brand">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Neon Logo Ideas
+        </button>
+        <button class="chip" data-prompt="Debug this JavaScript code and explain the fix">
+          <i class="fa-solid fa-bug"></i> Fix My Script
+        </button>
+        <button class="chip" data-prompt="Draft a professional freelance proposal for a web app">
+          <i class="fa-solid fa-rocket"></i> Client Proposal
+        </button>
+      </div>
+    </div>
+  `;
+  sidebar?.classList.remove('open');
+});
+
 // Plus Icon Dropdown Toggle
 const plusBtn = document.getElementById('plusBtn');
 const plusDropdown = document.getElementById('plusDropdown');
@@ -139,46 +186,6 @@ plusBtn?.addEventListener('click', (e) => {
 document.addEventListener('click', () => {
   if (plusDropdown) plusDropdown.classList.remove('active');
 });
-
-// --- GOOGLE PROFILE DRAWER & ACCOUNT SYSTEM ---
-const profileAvatarBtn = document.getElementById('profileAvatarBtn');
-const profileDropdown = document.getElementById('profileDropdown');
-
-if (profileAvatarBtn && profileDropdown) {
-  profileAvatarBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
-  });
-
-  document.addEventListener('click', () => {
-    profileDropdown.style.display = 'none';
-  });
-
-  profileDropdown.addEventListener('click', (e) => {
-    e.stopPropagation();
-  });
-
-  // Handle Google Account Actions inside Drawer
-  document.getElementById('manageGoogleAccount')?.addEventListener('click', () => {
-    window.open('https://myaccount.google.com/', '_blank');
-  });
-
-  document.getElementById('upgradePlanBtn')?.addEventListener('click', () => {
-    alert("Velox AI Pro Subscription feature coming soon!");
-  });
-
-  document.getElementById('logoutBtn')?.addEventListener('click', () => {
-    const confirmSignOut = confirm("Do you want to switch or sign in with another Google Account?");
-    if (confirmSignOut) {
-      let newEmail = prompt("Enter your Google Email address:", "jamshedkhan78661@gmail.com");
-      if (newEmail) {
-        const emailDisplay = document.getElementById('userEmailDisplay');
-        if (emailDisplay) emailDisplay.innerText = newEmail;
-        alert("Successfully signed in as " + newEmail);
-      }
-    }
-  });
-}
 
 // Voice-to-Text (Speech Recognition)
 const micBtn = document.getElementById('micBtn');
