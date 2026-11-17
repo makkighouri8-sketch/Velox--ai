@@ -7,9 +7,9 @@
 }
 
 body {
-  background-color: #000000; /* Pure Deep Black (AMOLED Dark) */
+  background-color: #000000;
   color: #e3e3e3;
-  height: 100vh;
+  height: 100dvh; /* Mobile keyboard fix */
   margin: 0;
   overflow: hidden;
 }
@@ -17,19 +17,20 @@ body {
 /* App Wrapper for Sidebar Layout */
 .app-wrapper {
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   position: relative;
+  overflow: hidden;
 }
 
 /* Sidebar Styles */
 .sidebar {
   position: fixed;
   top: 0;
-  left: -280px; /* Initially hidden */
+  left: -280px;
   width: 280px;
-  height: 100vh;
+  height: 100dvh;
   background-color: #0b0b0b;
   border-right: 1px solid #1f1f1f;
   display: flex;
@@ -108,7 +109,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 24px;
+  padding: 12px 20px;
   flex-shrink: 0;
 }
 
@@ -148,11 +149,6 @@ body {
   align-items: center;
   gap: 8px;
   font-weight: 500;
-  transition: background 0.2s;
-}
-
-.login-btn:hover {
-  background: #1a1a1a;
 }
 
 /* Chat Canvas */
@@ -166,12 +162,12 @@ body {
 }
 
 .welcome-screen {
-  margin-top: 15vh;
+  margin-top: 10vh;
   text-align: left;
 }
 
 .welcome-screen h1 {
-  font-size: 42px;
+  font-size: 38px;
   background: linear-gradient(90deg, #4285f4, #9b51e0, #e91e63);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -180,7 +176,7 @@ body {
 
 .welcome-screen p {
   color: #8e918f;
-  font-size: 24px;
+  font-size: 20px;
 }
 
 /* Quick Action Chips */
@@ -188,7 +184,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 28px;
+  margin-top: 20px;
 }
 
 .chip {
@@ -209,23 +205,20 @@ body {
 .chip i {
   color: #a855f7;
   font-size: 13px;
-  transition: transform 0.25s ease;
 }
 
 .chip:hover {
   background: #181818;
   border-color: #a855f7;
-  box-shadow: 0 0 15px rgba(168, 85, 247, 0.25);
-  transform: translateY(-2px);
-  color: #ffffff;
 }
 
-/* Input Area */
+/* Input Area - Fixed at bottom */
 .input-container {
-  padding: 16px 24px 24px;
+  padding: 12px 20px 20px;
   display: flex;
   justify-content: center;
   flex-shrink: 0;
+  background: #000000;
 }
 
 .input-box {
@@ -236,7 +229,7 @@ body {
   width: 100%;
   display: flex;
   align-items: flex-end;
-  padding: 10px 16px;
+  padding: 8px 14px;
   position: relative;
 }
 
@@ -244,15 +237,14 @@ body {
   background: transparent;
   border: none;
   color: #c4c7c5;
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
-  transition: background 0.2s, color 0.2s;
+  font-size: 16px;
 }
 
 .icon-btn:hover {
@@ -266,10 +258,10 @@ textarea {
   border: none;
   outline: none;
   color: #ffffff;
-  font-size: 16px;
+  font-size: 15px;
   resize: none;
-  padding: 10px 12px;
-  max-height: 150px;
+  padding: 8px 10px;
+  max-height: 120px;
   line-height: 1.4;
 }
 
@@ -291,7 +283,7 @@ textarea {
 .plus-dropdown {
   display: none;
   position: absolute;
-  bottom: 50px;
+  bottom: 45px;
   left: 0;
   background: #181818;
   border: 1px solid #333333;
@@ -308,11 +300,11 @@ textarea {
 }
 
 .menu-item {
-  padding: 12px 16px;
+  padding: 10px 14px;
   color: #e3e3e3;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   cursor: pointer;
   border: none;
   background: transparent;
@@ -333,8 +325,8 @@ textarea {
 }
 
 .thinking-container img {
-  width: 38px;
-  height: 38px;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
   display: block;
   flex-shrink: 0;
@@ -342,6 +334,5 @@ textarea {
 
 .thinking-container span {
   font-size: 14px;
-  font-weight: 400;
   color: #8e918f;
 }
