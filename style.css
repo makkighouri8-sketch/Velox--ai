@@ -11,7 +11,97 @@ body {
   color: #e3e3e3;
   height: 100vh;
   display: flex;
+  overflow: hidden;
+}
+
+/* App Wrapper for Sidebar Layout */
+.app-wrapper {
+  flex: 1;
+  display: flex;
   flex-direction: column;
+  height: 100vh;
+  transition: margin-left 0.3s ease;
+  overflow: hidden;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -280px; /* Initially hidden */
+  width: 280px;
+  height: 100vh;
+  background-color: #0b0b0b;
+  border-right: 1px solid #1f1f1f;
+  display: flex;
+  flex-direction: column;
+  transition: left 0.3s ease;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 8px;
+}
+
+.new-chat-btn {
+  background: #1a1a1a;
+  color: #e3e3e3;
+  border: 1px solid #333;
+  padding: 10px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  flex: 1;
+  transition: all 0.2s;
+}
+
+.new-chat-btn:hover {
+  background: #262626;
+  border-color: #a855f7;
+}
+
+.history-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.history-item {
+  padding: 10px 14px;
+  color: #9aa0a6;
+  font-size: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.2s, color 0.2s;
+}
+
+.history-item:hover {
+  background: #161616;
+  color: #fff;
+}
+
+.history-item.active {
+  background: #1c1c1c;
+  color: #a855f7;
+  font-weight: 500;
 }
 
 /* Header */
@@ -251,17 +341,7 @@ textarea {
   background: #262626;
 }
 
-/* Thinking Animation for AI Logo */
-@keyframes spin-rotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.rotating-icon {
-  animation: spin-rotate 1.2s linear infinite;
-}
-
-/* Perfect alignment, spacing and font adjustment for thinking state */
+/* Thinking Animation */
 .thinking-container {
   display: flex;
   align-items: center;
