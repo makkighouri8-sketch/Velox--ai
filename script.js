@@ -13,6 +13,24 @@ function escapeHtml(text) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+// Typewriter Effect Helper Function with Neon Glow
+function typeWriter(element, text, speed = 12, callback) {
+  let i = 0;
+  element.textContent = ""; // Clear initial text
+  
+  function type() {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      i++;
+      setTimeout(type, speed);
+    } else if (typeof callback === 'function') {
+      callback();
+    }
+  }
+  type();
+}
+
 // Send Message Functionality via Secure Vercel Backend Proxy
 async function handleSendMessage() {
   const messageText = textarea.value.trim();
@@ -63,22 +81,19 @@ async function handleSendMessage() {
     const data = await response.json();
     let aiReply = data.reply || data.error || "Maaf kijiyega, response hasil karne mein masla hua.";
 
-    // Thinking state ko hata kar clean message container banao with smooth fade-in reveal
+    // Thinking state ko hata kar clean message container banao with typewriter target
     aiBubble.className = '';
-    aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: flex-start; gap: 12px; opacity: 0; transition: opacity 0.4s ease-in;";
+    aiBubble.style.cssText = "margin: 16px 0; display: flex; align-items: flex-start; gap: 12px;";
     aiBubble.innerHTML = `
       <img src="logo.png" style="width: 24px; height: 24px; flex-shrink: 0; margin-top: 2px; object-fit: contain;" />
-      <div style="background: transparent; color: #e3e3e3; max-width: 80%; word-break: break-word; font-size: 15px; line-height: 1.6; white-space: pre-wrap;">
-        ${escapeHtml(aiReply)}
-      </div>
+      <div class="ai-response-text" style="background: transparent; color: #e3e3e3; max-width: 80%; word-break: break-word; font-size: 15px; line-height: 1.6; white-space: pre-wrap; text-shadow: 0 0 10px rgba(168, 85, 247, 0.15);"></div>
     `;
     
+    const textTarget = aiBubble.querySelector('.ai-response-text');
     chatContainer.scrollTop = chatContainer.scrollHeight;
 
-    // Smooth fade-in trigger karo
-    setTimeout(() => {
-      aiBubble.style.opacity = '1';
-    }, 50);
+    // Typewriter effect trigger karo
+    typeWriter(textTarget, aiReply);
 
   } catch (error) {
     console.error("Fetch Error:", error);
@@ -222,3 +237,4 @@ document.getElementById('cameraBtn')?.addEventListener('click', async () => {
     alert("Camera access denied or not supported.");
   }
 });
+  
