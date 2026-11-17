@@ -25,7 +25,8 @@ def chat():
         if not api_key:
             return jsonify({"error": "GEMINI_API_KEY is not configured on the server."}), 500
             
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        # Using gemini-pro for universal API key compatibility
+        model = genai.GenerativeModel('gemini-pro')
         response = model.generate_content(user_message)
         
         return jsonify({"reply": response.text})
