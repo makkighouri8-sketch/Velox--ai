@@ -10,18 +10,17 @@ body {
   background-color: #000000; /* Pure Deep Black (AMOLED Dark) */
   color: #e3e3e3;
   height: 100vh;
-  display: flex;
+  margin: 0;
   overflow: hidden;
 }
 
 /* App Wrapper for Sidebar Layout */
 .app-wrapper {
-  flex: 1;
+  width: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  transition: margin-left 0.3s ease;
-  overflow: hidden;
+  position: relative;
 }
 
 /* Sidebar Styles */
@@ -110,6 +109,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 16px 24px;
+  flex-shrink: 0;
 }
 
 .logo-container {
@@ -118,7 +118,6 @@ body {
   gap: 12px;
 }
 
-/* Custom SVG Logo Wrapper */
 .logo-icon-wrapper {
   width: 26px;
   height: 26px;
@@ -221,20 +220,12 @@ body {
   color: #ffffff;
 }
 
-.chip:hover i {
-  transform: scale(1.15);
-  color: #3b82f6;
-}
-
-.chip:active {
-  transform: translateY(0);
-}
-
-/* Input Area (Gemini Style) */
+/* Input Area */
 .input-container {
   padding: 16px 24px 24px;
   display: flex;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .input-box {
@@ -247,15 +238,8 @@ body {
   align-items: flex-end;
   padding: 10px 16px;
   position: relative;
-  transition: background 0.2s, border-color 0.2s;
 }
 
-.input-box:focus-within {
-  background: #161616;
-  border-color: #444444;
-}
-
-/* Buttons & Inputs */
 .icon-btn {
   background: transparent;
   border: none;
@@ -334,7 +318,6 @@ textarea {
   background: transparent;
   font-size: 14px;
   text-align: left;
-  transition: background 0.2s;
 }
 
 .menu-item:hover {
@@ -361,6 +344,4 @@ textarea {
   font-size: 14px;
   font-weight: 400;
   color: #8e918f;
-  letter-spacing: 0.2px;
-  line-height: 1;
 }
