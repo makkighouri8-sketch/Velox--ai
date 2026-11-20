@@ -496,42 +496,44 @@ function deleteSession(sessionId) {
   switchToSession(activeSessionId);
 }
 
-// Smooth Typewriter over formatted HTML chunks
+// Smooth, lag-free typewriter using plain text during stream, then full Markdown on finish
 function typeFormattedResponse(element, rawText, callback) {
-  const formattedHtml = formatAiMarkdown(rawText);
-  const tokens = formattedHtml.split(/(<[^>]+>|&[^;\s]+;|\s+)/g).filter(Boolean);
-  let idx = 0;
-  element.innerHTML = '';
+  const fullText = String(rawText || '');
+  element.style.whiteSpace = 'pre-wrap';
+  element.textContent = '';
 
-  const stepSize = tokens.length > 180 ? 6 : 2;
+  if (fullText.length === 0) {
+    element.style.whiteSpace = 'normal';
+    element.innerHTML = '';
+    if (typeof callback === 'function') callback();
+    return;
+  }
+
+  let idx = 0;
+  let stepCount = 0;
+  const chunkSize = fullText.length > 1500 ? 36 : (fullText.length > 500 ? 18 : 8);
 
   function tick() {
-    if (idx < tokens.length) {
-      element.innerHTML += tokens.slice(idx, idx + stepSize).join('');
-      idx += stepSize;
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-      setTimeout(tick, 14);
+    if (idx < fullText.length) {
+      idx = Math.min(fullText.length, idx + chunkSize);
+      element.textContent = fullText.slice(0, idx);
+      stepCount++;
+      if (stepCount % 3 === 0 || idx >= fullText.length) {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+      setTimeout(tick, 18);
     } else {
-      element.innerHTML = formattedHtml;
+      element.style.whiteSpace = 'normal';
+      element.innerHTML = formatAiMarkdown(fullText);
       chatContainer.scrollTop = chatContainer.scrollHeight;
       if (typeof callback === 'function') callback();
     }
   }
+
   tick();
 }
 
 // Send Message Functionality via Secure Vercel Backend Proxy
 async function handleSendMessage() {
   const messageText = textarea.value.trim();
-  if (!messageText) return;
-
-  if (sendBtn) sendBtn.disabled = true;
-
-  const currentSession = getActiveSession();
-
-  // Auto-rename chat on first user message
-  if (currentSession.messages.length === 0 || currentSession.title === 'Current Session') {
-    currentSession.title = generateAutoTitle(messageText);
-  }
-  currentSession.messages.push({ role: 'user', text: messageText });
-  currentSession
+  if (!messageTex
