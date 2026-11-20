@@ -1,4 +1,17 @@
 (function () {
+  window.addEventListener('error', function (e) {
+    try {
+      let errBox = document.getElementById('veloxRuntimeErr');
+      if (!errBox) {
+        errBox = document.createElement('div');
+        errBox.id = 'veloxRuntimeErr';
+        errBox.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:10000;background:#7f1d1d;color:#fecaca;padding:8px 12px;font-size:12px;font-family:monospace;';
+        document.body.appendChild(errBox);
+      }
+      errBox.textContent = 'JS Error: ' + (e.message || 'Unknown') + ' (Line ' + (e.lineno || '?') + ')';
+    } catch {}
+  });
+
   const textarea = document.getElementById('userInput');
   const chatContainer = document.getElementById('chatContainer');
   const sendBtn = document.getElementById('sendBtn');
@@ -26,7 +39,7 @@
 
   function createNewSessionObject() {
     const id = 'session_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
-    const obj = { id, title: 'Current Session', pinned: false, messages: [], updatedAt: Date.now() };
+    const obj = { id: id, title: 'Current Session', pinned: false, messages: [], updatedAt: Date.now() };
     sessions.unshift(obj);
     safeSetStorage();
     return id;
@@ -49,26 +62,18 @@
   }
 
   function getWelcomeHtml() {
-    return `
-      <div class="welcome-screen" id="welcomeScreen">
-        <h1>Hello, Jamshed</h1>
-        <p>How can Velox help you today?</p>
-        <div class="quick-chips">
-          <button type="button" class="chip" data-prompt="Write a clean, modern Python Flask API script">
-            <i class="fa-solid fa-code"></i> Write Python Code
-          </button>
-          <button type="button" class="chip" data-prompt="Give me 5 futuristic neon logo ideas for my tech brand">
-            <i class="fa-solid fa-wand-magic-sparkles"></i> Neon Logo Ideas
-          </button>
-          <button type="button" class="chip" data-prompt="Debug this JavaScript code and explain the fix">
-            <i class="fa-solid fa-bug"></i> Fix My Script
-          </button>
-          <button type="button" class="chip" data-prompt="Draft a professional freelance proposal for a web app">
-            <i class="fa-solid fa-rocket"></i> Client Proposal
-          </button>
-        </div>
-      </div>
-    `;
+    return (
+      '<div class="welcome-screen" id="welcomeScreen">' +
+        '<h1>Hello, Jamshed</h1>' +
+        '<p>How can Velox help you today?</p>' +
+        '<div class="quick-chips">' +
+          '<button type="button" class="chip" data-prompt="Write a clean, modern Python Flask API script"><i class="fa-solid fa-code"></i> Write Python Code</button>' +
+          '<button type="button" class="chip" data-prompt="Give me 5 futuristic neon logo ideas for my tech brand"><i class="fa-solid fa-wand-magic-sparkles"></i> Neon Logo Ideas</button>' +
+          '<button type="button" class="chip" data-prompt="Debug this JavaScript code and explain the fix"><i class="fa-solid fa-bug"></i> Fix My Script</button>' +
+          '<button type="button" class="chip" data-prompt="Draft a professional freelance proposal for a web app"><i class="fa-solid fa-rocket"></i> Client Proposal</button>' +
+        '</div>' +
+      '</div>'
+    );
   }
 
   function escapeHtml(text) {
@@ -203,10 +208,10 @@
         '<div style="width:40px;height:4px;background:#3c4043;border-radius:999px;margin:0 auto 12px;"></div>' +
         '<div id="veloxSheetTitle" style="font-size:13px;color:#9ca3af;margin-bottom:12px;padding:0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Chat Options</div>' +
         '<div style="display:flex;flex-direction:column;gap:6px;">' +
-          '<button type="button" id="sheetRenameBtn" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#222428;color:#e3e3e3;border:1px solid #2f3136;padding:13px 14px;border-radius:14px;font-size:14px;cursor:pointer;">✏️ <span>Rename</span></button>' +
-          '<button type="button" id="sheetPinBtn" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#222428;color:#e3e3e3;border:1px solid #2f3136;padding:13px 14px;border-radius:14px;font-size:14px;cursor:pointer;">📌 <span id="sheetPinLabel">Pin</span></button>' +
-          '<button type="button" id="sheetShareBtn" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#222428;color:#a8c7fa;border:1px solid #2f3136;padding:13px 14px;border-radius:14px;font-size:14px;cursor:pointer;">📤 <span>Share</span></button>' +
-          '<button type="button" id="sheetDeleteBtn" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:rgba(239,68,68,0.12);color:#ef4444;border:1px solid rgba(239,68,68,0.35);padding:13px 14px;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;">🗑️ <span style="color:#ef4444;">Delete</span></button>' +
+          '<button type="button" id="sheetRenameBtn" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#222428;color:#e3e3e3;border:1px solid #2f3136;padding:13px 14px;border-radius:14px;font-size:14px;cursor:pointer;"><span>✏️</span><span>Rename</span></button>' +
+          '<button type="button" id="sheetPinBtn" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#222428;color:#e3e3e3;border:1px solid #2f3136;padding:13px 14px;border-radius:14px;font-size:14px;cursor:pointer;"><span>📌</span><span id="sheetPinLabel">Pin</span></button>' +
+          '<button type="button" id="sheetShareBtn" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#222428;color:#a8c7fa;border:1px solid #2f3136;padding:13px 14px;border-radius:14px;font-size:14px;cursor:pointer;"><span>📤</span><span>Share</span></button>' +
+          '<button type="button" id="sheetDeleteBtn" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:rgba(239,68,68,0.12);color:#ef4444;border:1px solid rgba(239,68,68,0.35);padding:13px 14px;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;"><span>🗑️</span><span style="color:#ef4444;">Delete</span></button>' +
         '</div>' +
       '</div>';
     document.body.appendChild(overlay);
@@ -280,17 +285,11 @@
   }
 
   function renderHistoryList() {
-    const sidebarEl = document.getElementById('sidebar');
-    if (!sidebarEl) return;
-
-    let box = document.getElementById('chatHistoryList');
-    if (!box) {
-      box = document.createElement('div');
-      box.id = 'chatHistoryList';
-      box.style.cssText = 'margin-top:12px;display:flex;flex-direction:column;gap:6px;overflow-y:auto;max-height:65vh;padding-right:4px;user-select:none;-webkit-user-select:none;';
-      sidebarEl.appendChild(box);
-    }
+    const box = document.getElementById('historyList');
+    if (!box) return;
     box.innerHTML = '';
+    box.style.userSelect = 'none';
+    box.style.webkitUserSelect = 'none';
 
     const list = sessions
       .filter(s => (s.messages && s.messages.length > 0) || s.id === activeSessionId)
@@ -302,8 +301,9 @@
     list.forEach(function (s) {
       const isActive = s.id === activeSessionId;
       const row = document.createElement('div');
+      row.className = 'history-item' + (isActive ? ' active' : '');
       row.style.cssText =
-        'display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 12px;border-radius:12px;cursor:pointer;' +
+        'display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 12px;border-radius:12px;cursor:pointer;margin-bottom:6px;' +
         'background:' + (isActive ? '#2b2c2f' : '#1b1c1e') + ';' +
         'border:1px solid ' + (s.pinned ? '#6366f1' : (isActive ? '#4b5563' : '#2b2c2f')) + ';' +
         'color:' + (isActive ? '#ffffff' : '#c4c7c5') + ';font-size:13px;touch-action:pan-y;';
@@ -456,7 +456,4 @@
       const isErrorResponse = Boolean(data.error) || !response.ok;
 
       aiBubble.innerHTML =
-        '<img src="logo.png" alt="Velox" style="width:24px;height:24px;flex-shrink:0;margin-top:2px;object-fit:contain;" />' +
-        '<div class="ai-content-col" style="flex:1;max-width:88%;min-width:0;">' +
-          '<div class="ai-response-text" style="background:transparent;color:' + (isErrorResponse ? '#f87171' : '#e3e3e3') + ';word-break:break-word;font-size:15px;line-height:1.65;"></div>' +
-        '</
+        '<img src="logo.png" alt="Velox" style="width:24p
